@@ -1,1 +1,2 @@
-import AuthLayout from '@/features/auth/layouts/AuthLayout';import LoginPage from '@/features/auth/pages/LoginPage';export default function Page(){return <AuthLayout><LoginPage/></AuthLayout>}
+import LoginPage from "@/features/auth/pages/LoginPage";
+export default function Page() { return <LoginPage />; }

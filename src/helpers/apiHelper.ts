@@ -1,5 +1,20 @@
-const BASE=process.env.NEXT_PUBLIC_DELCOM_BASEURL||'https://open-api.delcom.org/api/v1'
-export const getAccessToken=()=>typeof window==='undefined'?null:localStorage.getItem('delcom_token')
-export const putAccessToken=(token:string|null)=>{if(typeof window==='undefined')return token;if(token)localStorage.setItem('delcom_token',token);else localStorage.removeItem('delcom_token');return token}
-export async function apiFetch<T=any>(path:string,options:RequestInit&{query?:Record<string,string|number|undefined>,auth?:boolean}={}){const {query,auth=true,...init}=options;const url=new URL(`${BASE}${path}`);Object.entries(query||{}).forEach(([k,v])=>v!==undefined&&url.searchParams.set(k,String(v)));const headers=new Headers(init.headers);headers.set('Accept','application/json');const token=getAccessToken();if(auth&&token)headers.set('Authorization',`Bearer ${token}`);let body=init.body;if(body&&!(body instanceof FormData)){headers.set('Content-Type','application/json')}const res=await fetch(url,{...init,headers,body});const data=await res.json().catch(()=>({status:res.ok?'success':'fail',message:res.statusText}));if(!res.ok||data.status==='fail')throw new Error(data.message||'Request gagal');return data as T}
-export const get=<T=any>(p:string,o={})=>apiFetch<T>(p,{...o,method:'GET'});export const post=<T=any>(p:string,b?:any,o={})=>apiFetch<T>(p,{...o,method:'POST',body:b&&b instanceof FormData?b:JSON.stringify(b??{})});export const put=<T=any>(p:string,b?:any,o={})=>apiFetch<T>(p,{...o,method:'PUT',body:b instanceof FormData?b:JSON.stringify(b??{})});export const del=<T=any>(p:string,o={})=>apiFetch<T>(p,{...o,method:'DELETE'})
+import { DELCOM_BASEURL } from "@/lib/config";
+export const getAccessToken = () => (typeof window === "undefined" ? null : localStorage.getItem("token"));
+export const putAccessToken = (t: string) => localStorage.setItem("token", t);
+export const removeAccessToken = () => localStorage.removeItem("token");
+type Opt = { method?: string; body?: unknown; query?: Record<string, string | number | undefined>; auth?: boolean };
+export async function api<T = unknown>(path: string, { method = "GET", body, query, auth = true }: Opt = {}): Promise<T> {
+  const url = new URL(DELCOM_BASEURL + path);
+  Object.entries(query || {}).forEach(([k, v]) => v !== undefined && url.searchParams.set(k, String(v)));
+  const headers: Record<string, string> = {};
+  const t = getAccessToken();
+  if (auth && t) headers.Authorization = `Bearer ${t}`;
+  let b: BodyInit | undefined;
+  if (body instanceof FormData) b = body;
+  else if (body) { headers["Content-Type"] = "application/json"; b = JSON.stringify(body); }
+  const res = await fetch(url, { method, headers, body: b });
+  const json = await res.json();
+  const failed = !res.ok || json.success === false || json.status === "fail" || json.status === "error";
+  if (failed) throw new Error(json.message || "Terjadi kesalahan");
+  return json.data as T;
+}

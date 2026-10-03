@@ -1,5 +1,10 @@
 node_modules
 .next
-.env
+out
 coverage
-*.log
+.env.local
+.env.*.local
+.env
+.vercel
+*.tsbuildinfo
+.DS_Store

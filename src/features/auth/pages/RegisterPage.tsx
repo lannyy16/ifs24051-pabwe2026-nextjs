@@ -1,3 +1,78 @@
-"use client"
-import {useState} from 'react';import {useRouter} from 'next/navigation';import {useDispatch} from 'react-redux';import {register} from '../states/reducer'
-export default function RegisterPage(){const [f,setF]=useState({name:'',email:'',password:''});const [error,setError]=useState('');const d=useDispatch();const router=useRouter();const set=(k:string)=>(e:React.ChangeEvent<HTMLInputElement>)=>setF({...f,[k]:e.target.value});async function submit(e:React.FormEvent){e.preventDefault();try{await d(register(f)).unwrap();router.push('/auth/login')}catch(err:any){setError(err.message||'Registrasi gagal')}}return <form onSubmit={submit} className="card p-7"><h2 className="text-2xl font-bold">Daftar</h2>{error&&<p className="mt-3 text-red-600">{error}</p>}{[['name','Nama'],['email','Email'],['password','Password']].map(([k,l])=><input key={k} className="w-full mt-4 p-3 border rounded-xl" aria-label={l} placeholder={l} type={k==='password'?'password':'text'} value={(f as any)[k]} onChange={set(k)}/>)}<button className="w-full mt-5 p-3 rounded-xl bg-indigo-600 text-white font-bold">Daftar</button></form>}
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import useInput from "@/hooks/useInput";
+import { register } from "../api/authApi";
+import { showErrorDialog, showSuccessDialog, showWarningDialog } from "@/helpers/toolsHelper";
+
+export default function RegisterPage() {
+  const router = useRouter();
+  const [name, onName] = useInput();
+  const [email, onEmail] = useInput();
+  const [password, onPass] = useInput();
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password.length < 6) return void showWarningDialog("Kata sandi minimal 6 karakter");
+    setBusy(true);
+    try {
+      await register(name, email, password);
+      await showSuccessDialog("Akun dibuat, silakan masuk");
+      router.replace("/auth/login");
+    } catch (err) {
+      showErrorDialog((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit} className="card space-y-4 p-8">
+      <h1 className="text-2xl font-extrabold">Buat akun baru</h1>
+      <p className="text-sm text-slate-600">Hanya butuh semenit</p>
+      <input
+        id="register-name-input"
+        name="name"
+        aria-label="Nama lengkap"
+        className="input"
+        placeholder="Nama lengkap"
+        value={name}
+        onChange={onName}
+        required
+      />
+      <input
+        id="register-email-input"
+        name="email"
+        aria-label="Email"
+        className="input"
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={onEmail}
+        required
+      />
+      <input
+        id="register-password-input"
+        name="password"
+        aria-label="Kata sandi"
+        className="input"
+        type="password"
+        placeholder="Kata sandi"
+        value={password}
+        onChange={onPass}
+        required
+      />
+      <button id="register-submit-button" type="submit" className="btn btn-primary w-full" disabled={busy}>
+        {busy ? "Memproses..." : "Daftar"}
+      </button>
+      <p className="text-center text-sm text-slate-600">
+        Sudah punya akun?{" "}
+        <Link className="font-semibold text-indigo-600" href="/auth/login">
+          Masuk
+        </Link>
+      </p>
+    </form>
+  );
+}

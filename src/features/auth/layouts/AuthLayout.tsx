@@ -1,2 +1,21 @@
-import Link from 'next/link'
-export default function AuthLayout({children}:{children:React.ReactNode}){return <main className="min-h-screen grid place-items-center bg-slate-100 p-6"><section className="w-full max-w-md"><div className="mb-6 text-center"><h1 className="text-3xl font-black text-indigo-700">Delcom Posts</h1><p className="text-slate-500">NextJS + TypeScript</p></div>{children}<p className="text-center mt-4"><Link href="/" className="text-indigo-600">Kembali ke beranda</Link></p></section></main>}
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getAccessToken } from "@/helpers/apiHelper";
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  useEffect(() => { if (getAccessToken()) router.replace("/"); }, [router]);
+return (
+  <div className="grid min-h-screen lg:grid-cols-2">
+    <aside className="hidden flex-col justify-between bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-12 text-white lg:flex">
+      <p className="text-2xl font-extrabold">✦ Postingan</p>
+      <div>
+        <p className="text-5xl font-extrabold leading-tight">Bagikan cerita,<br />temukan inspirasi.</p>
+        <p className="mt-4 max-w-md text-white">Terhubung dengan komunitas lewat postingan, suka, dan komentar.</p>
+      </div>
+      <p className="text-sm text-white">© 2026 Delcom</p>
+    </aside>
+    <main className="flex items-center justify-center p-6"><div className="w-full max-w-md">{children}</div></main>
+  </div>
+);
+}
