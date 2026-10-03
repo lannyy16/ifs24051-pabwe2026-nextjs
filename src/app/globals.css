@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+:root { --bg: #f6f8fc; --ink: #172033; --muted: #697386; --primary: #4f46e5; }
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { margin: 0; background: radial-gradient(circle at top left,#eef2ff 0,#f6f8fc 34%,#f8fafc 100%); color: var(--ink); }
+button,input,textarea,select { font: inherit; }
+.card { border: 1px solid #e8ebf2; background: white; border-radius: 18px; box-shadow: 0 8px 30px rgba(25,35,60,.06); }

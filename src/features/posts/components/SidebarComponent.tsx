@@ -1,0 +1,3 @@
+'use client'
+import Link from 'next/link';import {FiHome,FiUsers,FiUser} from 'react-icons/fi';
+export default function SidebarComponent({current}:{current:string}){const items=[['/','Semua Postingan',FiHome],['/?mine=1','Postingan Saya',FiHome],['/users','Daftar Pengguna',FiUsers],['/profile','Profil Saya',FiUser]] as const;return <aside className="hidden w-56 shrink-0 md:block"><nav className="card sticky top-24 space-y-1 p-3">{items.map(([href,label,Icon])=><Link key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold ${current===href?'bg-indigo-50 text-indigo-600':'text-slate-600 hover:bg-slate-50'}`}><Icon/>{label}</Link>)}</nav></aside>}

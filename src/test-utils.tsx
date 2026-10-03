@@ -1,0 +1,2 @@
+import type { ReactElement } from 'react';import {render} from '@testing-library/react';import {Provider} from 'react-redux';import {configureStore} from '@reduxjs/toolkit';import auth from './features/auth/states/reducer';import users from './features/users/states/reducer';import posts from './features/posts/states/reducer';
+export const renderWithProviders=(ui:ReactElement)=>render(<Provider store={configureStore({reducer:{auth,users,posts}})}>{ui}</Provider>)
