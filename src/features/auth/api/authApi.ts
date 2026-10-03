@@ -1,5 +1,3 @@
-import { post } from '@/helpers/apiHelper'
-import type { ApiResult,AuthPayload,RegisterPayload,User } from '@/types'
-export const loginApi=(payload:AuthPayload)=>post<ApiResult<{token:string;user:User}>>('/auth/login',payload,{auth:false})
-export const registerApi=(payload:RegisterPayload)=>post<ApiResult>('/auth/register',payload,{auth:false})
-export const logoutApi=()=>post<ApiResult>('/auth/logout')
+import {post} from '@/helpers/apiHelper'
+export const loginApi=(data:{email:string;password:string})=>post('/auth/login',data,{auth:false})
+export const registerApi=(data:{name:string;email:string;password:string})=>post('/auth/register',data,{auth:false})

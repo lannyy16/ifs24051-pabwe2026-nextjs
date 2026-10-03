@@ -1,6 +1,2 @@
-'use client'
-import type { ReactNode } from 'react'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAppSelector } from '@/hooks/redux'
-export default function AuthLayout({children}:{children:ReactNode}){const router=useRouter();const user=useAppSelector(s=>s.auth.user);useEffect(()=>{if(user)router.replace('/')},[user,router]);return <main className="min-h-screen grid lg:grid-cols-2"><section className="hidden lg:flex bg-indigo-600 text-white p-14 flex-col justify-between"><div className="text-2xl font-black">Delcom Posts</div><div><p className="text-5xl font-black leading-tight">Bagikan cerita.<br/>Temukan inspirasi.</p><p className="mt-5 text-indigo-100 max-w-md">Aplikasi postingan sederhana berbasis Next.js, TypeScript, Redux Toolkit dan Delcom Open API.</p></div><p className="text-sm text-indigo-200">PABWE 2026 • NextJS</p></section><section className="flex items-center justify-center p-6">{children}</section></main>}
+import Link from 'next/link'
+export default function AuthLayout({children}:{children:React.ReactNode}){return <main className="min-h-screen grid place-items-center bg-slate-100 p-6"><section className="w-full max-w-md"><div className="mb-6 text-center"><h1 className="text-3xl font-black text-indigo-700">Delcom Posts</h1><p className="text-slate-500">NextJS + TypeScript</p></div>{children}<p className="text-center mt-4"><Link href="/" className="text-indigo-600">Kembali ke beranda</Link></p></section></main>}
