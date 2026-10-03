@@ -1,3 +1,7 @@
 import type { NextConfig } from 'next'
-const nextConfig: NextConfig = { reactStrictMode: true, experimental: { turbopack: true } }
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+}
+
 export default nextConfig
