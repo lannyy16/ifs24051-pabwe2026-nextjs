@@ -1,23 +1,16 @@
-import type { NextConfig } from "next"
+import type { NextConfig } from "next";
+
+const API = process.env.NEXT_PUBLIC_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  poweredByHeader: false,
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
-        ],
-      },
-    ]
+  images: { unoptimized: true },
+  compress: true,
+  productionBrowserSourceMaps: true,
+  experimental: { inlineCss: true },
+  async rewrites() {
+    return [{ source: "/delcom-proxy/:path*", destination: `${API}/:path*` }];
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

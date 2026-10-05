@@ -1,3 +1,12 @@
-import {get,post,put,del} from '@/helpers/apiHelper'
-export const getPosts=(mine=false)=>get('/posts',{query:mine?{is_me:1}:{}});
-export const getPost=(id:number)=>get(`/posts/${id}`);export const addPost=(description:string)=>post('/posts',{description});export const changePost=(id:number,description:string)=>put(`/posts/${id}`,{description});export const deletePost=(id:number)=>del(`/posts/${id}`);export const likePost=(id:number)=>post(`/posts/${id}/likes`);export const addComment=(id:number,comment:string)=>post(`/posts/${id}/comments`,{comment});export const deleteComment=(postId:number,commentId:number)=>del(`/posts/${postId}/comments`,{query:{comment_id:commentId}})
+import { api } from "@/helpers/apiHelper";
+import type { Post } from "@/types";
+export const getPosts = (isMe = false) => api<{ posts: Post[] }>("/posts", { query: { is_me: isMe ? 1 : undefined } });
+export const getPost = (id: string) => api<{ post: Post }>(`/posts/${id}`);
+export const addPost = (description: string) => api("/posts", { method: "POST", body: { description } });
+export const changePost = (id: string, description: string) => api(`/posts/${id}`, { method: "PUT", body: { description } });
+export const changeCover = (id: string, file: File) => { const f = new FormData(); f.append("cover", file); return api(`/posts/${id}/cover`, { method: "POST", body: f }); };
+export const deletePost = (id: string) => api(`/posts/${id}`, { method: "DELETE" });
+export const toggleLike = (id: string) => api(`/posts/${id}/likes`, { method: "POST" });
+export const addComment = (id: string, comment: string) => api(`/posts/${id}/comments`, { method: "POST", body: { comment } });
+export const deleteComment = (id: string, comment_id: string) => api(`/posts/${id}/comments`, { method: "DELETE", body: { comment_id } });
+export const deleteAllPosts = () => api("/posts", { method: "DELETE" });
