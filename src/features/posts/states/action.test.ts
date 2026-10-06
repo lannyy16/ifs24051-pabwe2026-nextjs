@@ -31,7 +31,9 @@ describe("posts action thunks", () => {
   });
 
   it("fetchPosts menggunakan false sebagai default isMe", async () => {
-    vi.mocked(postApi.getPosts).mockResolvedValue([]);
+    vi.mocked(postApi.getPosts).mockResolvedValue({
+      posts: [],
+    });
 
     const result = await fetchPosts()(vi.fn(), vi.fn(), undefined);
 
@@ -40,7 +42,9 @@ describe("posts action thunks", () => {
   });
 
   it("fetchPosts menggunakan nilai isMe yang diberikan", async () => {
-    vi.mocked(postApi.getPosts).mockResolvedValue([]);
+    vi.mocked(postApi.getPosts).mockResolvedValue({
+      posts: [],
+    });
 
     const result = await fetchPosts(true)(vi.fn(), vi.fn(), undefined);
 
@@ -150,7 +154,14 @@ describe("posts action thunks", () => {
     })(vi.fn(), vi.fn(), undefined);
 
     expect(result.type).toBe("posts/uploadPostCover/rejected");
-    expect(result.error.message).toBe("File cover is required");
+
+    const rejectedResult = result as ReturnType<
+      typeof uploadPostCover.rejected
+    >;
+
+    expect(rejectedResult.error.message).toBe(
+      "File cover is required"
+    );
   });
 
   it("deletePost memanggil API dan mengembalikan id", async () => {
@@ -236,7 +247,12 @@ describe("posts action thunks", () => {
     })(vi.fn(), vi.fn(), undefined);
 
     expect(result.type).toBe("posts/deleteComment/rejected");
-    expect(result.error.message).toBe(
+
+    const rejectedResult = result as ReturnType<
+      typeof deleteComment.rejected
+    >;
+
+    expect(rejectedResult.error.message).toBe(
       "postId and commentId are required"
     );
   });
@@ -247,7 +263,12 @@ describe("posts action thunks", () => {
     })(vi.fn(), vi.fn(), undefined);
 
     expect(result.type).toBe("posts/deleteComment/rejected");
-    expect(result.error.message).toBe(
+
+    const rejectedResult = result as ReturnType<
+      typeof deleteComment.rejected
+    >;
+
+    expect(rejectedResult.error.message).toBe(
       "postId and commentId are required"
     );
   });

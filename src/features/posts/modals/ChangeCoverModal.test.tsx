@@ -58,7 +58,9 @@ describe("ChangeCoverModal", () => {
         value: vi.fn(() => "blob:test-cover"),
       });
     } else {
-      vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:test-cover");
+      vi.spyOn(URL, "createObjectURL").mockReturnValue(
+        "blob:test-cover",
+      );
     }
   });
 
@@ -95,7 +97,9 @@ describe("ChangeCoverModal", () => {
 
     expect(screen.getByText("Ganti cover")).toBeInTheDocument();
 
-    expect(screen.queryByAltText("Preview cover")).not.toBeInTheDocument();
+    expect(
+      screen.queryByAltText("Preview cover"),
+    ).not.toBeInTheDocument();
   });
 
   it("menampilkan error ketika submit tanpa memilih gambar", () => {
@@ -107,7 +111,9 @@ describe("ChangeCoverModal", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Unggah" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Unggah" }),
+    );
 
     expect(showErrorDialog).toHaveBeenCalledWith(
       "Pilih gambar terlebih dahulu.",
@@ -174,7 +180,10 @@ describe("ChangeCoverModal", () => {
     const onDone = vi.fn();
 
     vi.mocked(changeCover).mockResolvedValueOnce(undefined);
-    vi.mocked(showSuccessDialog).mockResolvedValueOnce(undefined);
+
+    vi.mocked(showSuccessDialog).mockResolvedValueOnce(
+      {} as Awaited<ReturnType<typeof showSuccessDialog>>,
+    );
 
     render(
       <ChangeCoverModal
@@ -198,10 +207,15 @@ describe("ChangeCoverModal", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Unggah" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Unggah" }),
+    );
 
     await waitFor(() => {
-      expect(changeCover).toHaveBeenCalledWith("post-1", file);
+      expect(changeCover).toHaveBeenCalledWith(
+        "post-1",
+        file,
+      );
     });
 
     expect(showSuccessDialog).toHaveBeenCalledWith(
@@ -244,11 +258,15 @@ describe("ChangeCoverModal", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Unggah/ }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Unggah/ }),
+    );
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /Mengunggah/ }),
+        screen.getByRole("button", {
+          name: /Mengunggah/,
+        }),
       ).toBeDisabled();
     });
 
@@ -288,7 +306,9 @@ describe("ChangeCoverModal", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Unggah/ }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Unggah/ }),
+    );
 
     await waitFor(() => {
       expect(showErrorDialog).toHaveBeenCalledWith(
@@ -322,10 +342,14 @@ describe("ChangeCoverModal", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Unggah/ }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Unggah/ }),
+    );
 
     await waitFor(() => {
-      expect(showErrorDialog).toHaveBeenCalledWith("Upload gagal");
+      expect(showErrorDialog).toHaveBeenCalledWith(
+        "Upload gagal",
+      );
     });
   });
 
@@ -340,7 +364,9 @@ describe("ChangeCoverModal", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Batal" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Batal" }),
+    );
 
     expect(onClose).toHaveBeenCalled();
   });

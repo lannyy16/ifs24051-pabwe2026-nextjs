@@ -51,31 +51,31 @@ describe("RegisterPage", () => {
     render(<RegisterPage />);
 
     expect(
-      screen.getByRole("heading", { name: "Buat akun baru" })
+      screen.getByRole("heading", { name: "Buat akun baru" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText("Hanya butuh semenit")
+      screen.getByText("Hanya butuh semenit"),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByLabelText("Nama lengkap")
+      screen.getByLabelText("Nama lengkap"),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByLabelText("Email")
+      screen.getByLabelText("Email"),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByLabelText("Kata sandi")
+      screen.getByLabelText("Kata sandi"),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Daftar" })
+      screen.getByRole("button", { name: "Daftar" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("link", { name: "Masuk" })
+      screen.getByRole("link", { name: "Masuk" }),
     ).toHaveAttribute("href", "/auth/login");
   });
 
@@ -133,12 +133,12 @@ describe("RegisterPage", () => {
     fireEvent.click(
       screen.getByRole("button", {
         name: "Daftar",
-      })
+      }),
     );
 
     await waitFor(() => {
       expect(showWarningDialog).toHaveBeenCalledWith(
-        "Kata sandi minimal 6 karakter"
+        "Kata sandi minimal 6 karakter",
       );
     });
 
@@ -148,7 +148,10 @@ describe("RegisterPage", () => {
 
   it("berhasil membuat akun dan redirect ke halaman login", async () => {
     vi.mocked(register).mockResolvedValue(undefined);
-    vi.mocked(showSuccessDialog).mockResolvedValue(undefined);
+
+    vi.mocked(showSuccessDialog).mockResolvedValue(
+      {} as Awaited<ReturnType<typeof showSuccessDialog>>,
+    );
 
     render(<RegisterPage />);
 
@@ -173,35 +176,35 @@ describe("RegisterPage", () => {
     fireEvent.click(
       screen.getByRole("button", {
         name: "Daftar",
-      })
+      }),
     );
 
     expect(
       screen.getByRole("button", {
         name: "Memproses...",
-      })
+      }),
     ).toBeDisabled();
 
     await waitFor(() => {
       expect(register).toHaveBeenCalledWith(
         "Karina Putri Sion",
         "karina@example.com",
-        "password123"
+        "password123",
       );
     });
 
     expect(showSuccessDialog).toHaveBeenCalledWith(
-      "Akun dibuat, silakan masuk"
+      "Akun dibuat, silakan masuk",
     );
 
     expect(mockReplace).toHaveBeenCalledWith(
-      "/auth/login"
+      "/auth/login",
     );
   });
 
   it("menampilkan error ketika register gagal", async () => {
     vi.mocked(register).mockRejectedValue(
-      new Error("Email sudah digunakan")
+      new Error("Email sudah digunakan"),
     );
 
     render(<RegisterPage />);
@@ -227,12 +230,12 @@ describe("RegisterPage", () => {
     fireEvent.click(
       screen.getByRole("button", {
         name: "Daftar",
-      })
+      }),
     );
 
     await waitFor(() => {
       expect(showErrorDialog).toHaveBeenCalledWith(
-        "Email sudah digunakan"
+        "Email sudah digunakan",
       );
     });
 

@@ -147,7 +147,7 @@ const setState = (
   post: Post | null,
   profile: { id: string; name?: string } | null,
 ) => {
-  const state = {
+  const currentState = {
     posts: {
       post,
     },
@@ -158,7 +158,8 @@ const setState = (
   };
 
   mockUseAppSelector.mockImplementation(
-    (selector: (state: typeof state) => unknown) => selector(state),
+    (selector: (selectedState: typeof currentState) => unknown) =>
+      selector(currentState),
   );
 };
 
@@ -821,7 +822,7 @@ describe("DetailPage", () => {
           id: "comment-4",
           user_id: "user-4",
           comment: "Komentar author null",
-          author: null,
+          author: undefined,
         },
       ],
     } as Post;
