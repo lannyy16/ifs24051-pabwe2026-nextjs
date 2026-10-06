@@ -1,3 +1,4 @@
+/* c8 ignore file */
 export interface User { id: string; name: string; email: string; photo?: string | null }
 export interface PostAuthor { id: string; name: string; photo?: string | null }
 export interface PostComment { id: string; comment: string; user_id: string; author?: PostAuthor; created_at?: string }

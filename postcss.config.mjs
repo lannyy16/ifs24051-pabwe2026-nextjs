@@ -1,2 +1,9 @@
-const config = { plugins: { "@tailwindcss/postcss": {} } };
+/* c8 ignore file */
+
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
 export default config;

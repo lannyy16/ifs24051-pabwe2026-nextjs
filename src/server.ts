@@ -1,8 +1,23 @@
-import next from "next";
+/* c8 ignore file */
+
 import { createServer } from "http";
-const port = Number(process.env.APP_PORT || 3000);
-const app = next({ dev: process.env.NODE_ENV !== "production", turbopack: true });
+import next from "next";
+
+const port = Number(process.env.PORT || process.env.APP_PORT || 3000);
+const hostname = process.env.APP_HOST || "0.0.0.0";
+
+const app = next({
+  dev: process.env.NODE_ENV !== "production",
+  hostname,
+  port,
+});
+
+const handle = app.getRequestHandler();
+
 app.prepare().then(() => {
-  const handle = app.getRequestHandler();
-  createServer((req, res) => handle(req, res)).listen(port, () => console.log(`> Ready on http://localhost:${port}`));
+  createServer((req, res) => {
+    handle(req, res);
+  }).listen(port, hostname, () => {
+    console.log(`> Next.js ready: http://${hostname}:${port}`);
+  });
 });

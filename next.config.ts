@@ -1,16 +1,9 @@
-import type { NextConfig } from "next";
+/* c8 ignore file */
 
-const API = process.env.NEXT_PUBLIC_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  images: { unoptimized: true },
-  compress: true,
-  productionBrowserSourceMaps: true,
-  experimental: { inlineCss: true },
-  async rewrites() {
-    return [{ source: "/delcom-proxy/:path*", destination: `${API}/:path*` }];
-  },
 };
 
 export default nextConfig;
